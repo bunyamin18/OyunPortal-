@@ -1,0 +1,20 @@
+name: Update Games
+on:
+  schedule:
+    - cron: '0 0 * * *'   # every midnight UTC
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-node@v3
+      - run: npm install node-fetch
+      - run: node js/fetch-games.js
+        env:
+          RAWG_API_KEY: ${{ secrets.RAWG_API_KEY }}
+      - run: |
+          git config user.name "github-actions"
+          git config user.email "actions@github.com"
+          git add data/games.json
+          git commit -m "Daily games update" || echo "No changes"
+          git push
