@@ -1,15 +1,17 @@
-name: Update Games
+name: Günlük Oyun Listesi Güncelleme
+
 on:
   schedule:
-    - cron: '0 0 * * *'   # every midnight UTC
+    - cron: '0 0 * * *'
+
 jobs:
-  build:
+  update-games:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
       - uses: actions/setup-node@v3
       - run: npm install node-fetch
-      - run: node js/fetch-games.js
+      - run: node fetch-games.js
         env:
           RAWG_API_KEY: ${{ secrets.RAWG_API_KEY }}
       - run: |
